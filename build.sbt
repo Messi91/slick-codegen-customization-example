@@ -13,7 +13,7 @@ lazy val root = (project in file("."))
     .settings(sharedSettings)
     .settings(slick := slickCodeGenTask.value) // register manual sbt command)
     .settings(sourceGenerators in Compile += slickCodeGenTask.taskValue) // register automatic code generation on every compile, remove for only manual use)
-    .settings(sourceManaged in Compile <<= baseDirectory { _ / "src/generated-sources/scala" })
+    .settings(sourceManaged in Compile <<= baseDirectory { _ / generatedSourcesFolder })
     .dependsOn(codegen)
 
 
@@ -34,6 +34,7 @@ lazy val sharedSettings = Seq(
   )
 )
 
+lazy val generatedSourcesFolder = "src/generated-sources/scala"
 
 // code generation task that calls the customized code generator
 lazy val slick = taskKey[Seq[File]]("gen-tables")
