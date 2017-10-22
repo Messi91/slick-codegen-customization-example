@@ -1,3 +1,4 @@
+name := "slick-codegen-customization-example"
 
 /**
   *  This is a slightly more advanced sbt setup using two projects.
@@ -39,11 +40,11 @@ lazy val generatedSourcesFolder = "src/generated-sources/scala"
 // code generation task that calls the customized code generator
 lazy val slick = taskKey[Seq[File]]("gen-tables")
 lazy val slickCodeGenTask = Def.task {
-  val dir = sourceManaged.value
+  val dir = baseDirectory { _ / generatedSourcesFolder }.value
   val cp = (dependencyClasspath in Compile).value
   val r = (runner in Compile).value
   val s = streams.value
-  val outputDir = (dir / "slick").getPath // place generated files in sbt's managed sources folder
+  val outputDir = dir.getPath // place generated files in sbt's managed sources folder
   toError(r.run("demo.CustomizedCodeGenerator", cp.files, Array(outputDir), s.log))
   val fname = outputDir + "/demo/Tables.scala"
   Seq(file(fname))

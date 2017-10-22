@@ -13,6 +13,7 @@ import scala.concurrent.duration._
  */
 object CustomizedCodeGenerator{
   def main(args: Array[String]): Unit = {
+    println("--Start of generation--")
     Await.ready(
       codegen.map(_.writeToFile(
         "slick.driver.H2Driver",
@@ -23,13 +24,14 @@ object CustomizedCodeGenerator{
       )),
       20.seconds
     )
+    println("--End of generation--")
   }
 
   val db = H2Driver.api.Database.forURL(url,driver=jdbcDriver)
   // filter out desired tables
-  val included = Seq("COFFEES","SUPPLIERS","COF_INVENTORY")
+  val included = Seq("COFFEES","SUPPLIERS","COF_INVENTORY","message")
   val codegen = db.run{
-    H2Driver.defaultTables.map(_.filter(t => included contains t.name.name)).flatMap( H2Driver.createModelBuilder(_,false).buildModel )
+    H2Driver.defaultTables.flatMap( H2Driver.createModelBuilder(_,false).buildModel )
   }.map{ model =>
     new slick.codegen.SourceCodeGenerator(model){
       // customize Scala entity name (case class, etc.)
