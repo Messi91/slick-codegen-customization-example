@@ -1,10 +1,11 @@
-package demo 
-import slick.model.Model
+package demo
+
+import demo.Config._
 import slick.driver.H2Driver
-import Config._
+
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
 import scala.concurrent.duration._
-import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  *  This customizes the Slick code generator. We only do simple name mappings.
